@@ -1,6 +1,4 @@
 # skin-noskin
-blog post repo
-
 
 site: https://archive.ics.uci.edu/ml/datasets/Skin+Segmentation
 
