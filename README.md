@@ -10,9 +10,9 @@ The data in Skin Segmentation were collected "by randomly sampling B,G,R values 
 
 - The color FERET database: https://www.nist.gov/itl/iad/image-group/color-feret-database
 
-- 1 article that uses the data (behind a paywall): https://ieeexplore.ieee.org/abstract/document/5409447 (behind paywall) 
+- 1 article that uses the data (behind a paywall): https://ieeexplore.ieee.org/abstract/document/5409447 
 
-- Another article that uses data (behind a paywall): https://link.springer.com/chapter/10.1007/978-3-642-10520-3_69 (behind paywall)
+- Another article that uses data (behind a paywall): https://link.springer.com/chapter/10.1007/978-3-642-10520-3_69
 
 To run the code in the Jupyter Notebook on your own, you will need to have Python 3, scikit-learn, Pandas, NumPy, matplotlib, Seaborn, Itertools, and imblearn installed/imported on your machine/in your virtual environment.
 
