@@ -11,7 +11,7 @@ What is the (*log odds of*) probability that a pixel containing R, G, B values r
 
 ### Why (Binary) Logistic Regression?
 
-Binary classification problems are perfect for logistic regression because logistic regression allows us to predict the probability of a discrete outcome (here, a pixel containing skin or no skin) based on a set of independent features (here, R, G, and B values) related to that outcome.
+Binary classification problems are perfect for logistic regression because logistic regression allows us to predict the probability of a discrete outcome (here, a pixel containing or not containing skin) based on a set of independent features (here, R, G, B values) related to that outcome.
 
 **Why not linear regression?** While the underlying mechanism in logistic regression is linear regression (because the log odds probability of the outcome is a linear function of the features), linear regression is best used when trying to model the linear relationship between various (discrete or continuous) features with a *continuous* outcome. Moreover, linear regression models aim to minimize the sum of squared errors, while logistic regression models aim to model the parameters under which our observations become most likely.
 
@@ -27,7 +27,7 @@ The dataset has been cited in two scholarly articles, both of which are viewable
 
 ### Future Possibilities
 
-In addition to optimizing my model by testing out the ID3 and CART decision tree algorithms, I would love to do some hyperparameter tuning after testing my model out with a various pictures of my friends.
+In addition to optimizing my model by testing out the ID3 and CART decision tree algorithms, I would love to do some hyperparameter tuning after testing my model out with pictures I take myself.
 
 ## EXPLORING THE DATA
 
@@ -54,7 +54,7 @@ From our dataset's description ([here](https://archive.ics.uci.edu/ml/datasets/S
 
 We can see in the normalized readout (the 2nd one, showing the percentages of the total that each label makes up) that our dataset is a bit imbalanced: about 79% of our pixels are classified as no-skin while about 21% of our pixels are classified as skin. 
 
-While we could try to balance our dataset using a technique like SMOTE (For more on SMOTE, I recommend checking out Nick Becker states in his blog post "[The Right Way to Oversample](https://beckernick.github.io/oversampling-modeling/)), in data-science circles this type of imbalance is perfectly acceptable; if we had a split along the lines of 99% v 1%, then we might consider taking the time to balance our data
+While we could try to balance our dataset using a technique like SMOTE (For more on SMOTE, I recommend checking out Nick Becker's blog post "[The Right Way to Oversample](https://beckernick.github.io/oversampling-modeling/)), in data-science circles this type of imbalance is acceptable; if we had a split along the lines of 99% v. 1%, then we might consider taking the time to balance our data
 
 ## PREPARING THE DATA
 
@@ -206,11 +206,6 @@ print (f'F-1 Score: {round(f1_score(y_test, y_hat_test),2)}')
 print (f'Precision: {round(precision_score(y_test, y_hat_test),2)}')
 
 ```
-
-    /Users/flatironschool/anaconda3/lib/python3.6/site-packages/sklearn/linear_model/logistic.py:433: FutureWarning: Default solver will be changed to 'lbfgs' in 0.22. Specify a solver to silence this warning.
-      FutureWarning)
-
-
     
     TEST RESULTS
     Accuracy Score: 0.91
@@ -240,7 +235,7 @@ print(classification_report(y_test,y_hat_test))
 
 #### Test Results Interpretation
 
-You can see above that my model's accuracy score (i.e. the correct predictions from all predictions made) is 91%. This means that my model will classify an before-unseen pixel as containing skin or no skin 91% of the time.
+You can see above that my model's accuracy score (i.e. the correct predictions from all predictions made) is 91%. This means that my model will classify a before-unseen pixel as containing skin or no skin correctly 91% of the time.
 
 My model's recall, f-1 score, and precision are lower than its accuracy. In the future, it might be nice to do some feature engineering and/or hyperparameter tuning to improve these metrics.
 
@@ -249,7 +244,7 @@ As a reminder:
 - Precision is number of true positives over the total number of predicted positives.
 - An f-1 Score is essentially a single number that takes into account both precision and recall to give interpreters a quick idea of model performance (kind of like the balance between the two).
 
-Depending on the task at hand, I might want to prioritize increasing my model's precision over its recall (or vice versa). If my model were to be used for determining whether there were people on the ground before a bomb strike, I would very likely want to prioritize precision – it would be better to be very, very sure there are no people and risk missing an inanimate object by a few feet than vice versa.
+Depending on the task at hand, I might want to prioritize increasing my model's precision over its recall (or vice versa). If my model were to be used for determining whether there were people on the ground before a bomb strike, I would very likely want to prioritize precision – it would be better to be very, very sure there were no people and risk missing an inanimate target by a few feet than vice versa.
 
 (You can also see from the "Classification Report" above that our metrics are higher on our no-skin pixels, but that our priority lies with identifying pixels containing people's faces.)
 
@@ -272,7 +267,7 @@ plot_confusion_matrix(cnf_matrix,classes=[1,2])
 
 #### Confusion Matrix Interpretation
 
-As you can see from above, our model did have incorrect classifications a fair bit of the time (1,608 false positives (3%) and 3,018 false negatives (2%)), but nothing too alarming. What's most important is that the model classified skin-having pixels as skin and non-skin-having pixels as no-skin 91% of the time.
+As you can see from above, our model did have incorrect classifications some of the time (1,608 false positives (3%) and 3,018 false negatives (2%)), but nothing too alarming. What's most important is that the model classified skin-having pixels as skin and non-skin-having pixels as no-skin 91% of the time.
 
 
 ```python
@@ -285,11 +280,6 @@ y_score = logreg.fit(X_train, y_train).decision_function(X_test)
 # fpr stands for false positive rate, and tpr stands for true positive rate.
 fpr, tpr, thresholds = roc_curve(y_test, y_score)
 ```
-
-    /Users/flatironschool/anaconda3/lib/python3.6/site-packages/sklearn/linear_model/logistic.py:433: FutureWarning: Default solver will be changed to 'lbfgs' in 0.22. Specify a solver to silence this warning.
-      FutureWarning)
-
-
 
 ```python
 import matplotlib.pyplot as plt
@@ -329,19 +319,21 @@ plt.show()
 
 #### Interpreting ROC Curve & AUC Metric
 
-As Will Koehrsen writes in his great [blog post](https://towardsdatascience.com/beyond-accuracy-precision-and-recall-3da06bea9f6c) on evaluation metrics, "the ROC curve shows how the recall vs precision relationship changes as we vary the threshold for identifying a positive in our model."
+What is an ROC curve, and why should we care? As Will Koehrsen writes in his great [blog post](https://towardsdatascience.com/beyond-accuracy-precision-and-recall-3da06bea9f6c) on evaluation metrics, "the ROC curve shows how the recall vs precision relationship changes as we vary the threshold for identifying a positive in our model."
 
-The usefulness of an ROC curve is that it gives its interpreter a visualization of what happens when we move the threshold up or down for our true positives and false negatives (i.e. the tradeoff between sensitivity (trp) and specificity (fpr). The more accurate our model, the more our curve will hug the top left side of the graph, which what ours is doing! (For most of us the ideal ROC-curve would look like a 90-degree angle, which would indicate 100% sensitivity and 100% specificity – Check out this [great video](https://www.youtube.com/watch?v=egTNM8NSa2k) for more info.) 
+The usefulness of an ROC curve is that it gives its interpreter a visualization of what happens when we move the threshold up or down for our true positives and false negatives (i.e. the tradeoff between sensitivity (trp) and specificity (fpr). The more accurate our model, the more our curve will hug the top left side of the graph, which is what ours is doing! (The perfect ROC-curve would look like a 90-degree angle, indicating 100% sensitivity and 100% specificity – Check out this [great video](https://www.youtube.com/watch?v=egTNM8NSa2k) for more info.) 
 
-After checking out our ROC curve, interpreters should calcuate the AUC, which is the total area under the curve. This is a single-number summary of a model's accuracy. The higher the AUC, the better the model (a random classifier, represented by the dotted blue line above, has an AUC of 0.5, which we always want to aim above). As you can see, our models' AUC is 0.93, which is pretty good.
+After inspecting our ROC curve, we can calcuate the AUC, which is the total area under the curve. This is a single-number summary of a model's accuracy. The higher the AUC, the better the model (a random classifier, represented by the dotted blue line above, has an AUC of 0.5, which we always want to aim above). As you can see, our models' AUC is 0.93, which is pretty good.
 
 ## BUT DOES THE MODEL HOLD UP? 
 
-By evaluating my model by using K-Fold Cross-Validation, I can see if my model holds up to more rigorous testing.
+By evaluating my model using K-Fold Cross-Validation, I can see if my model holds up to more rigorous testing.
 
 In k-fold cross-validation, instead of relying on a single instance of train-test-split, the results of which rely heavily on which observations happen to be put into the test group (i.e. there is the possibility of high bias), the algorithm splits up my data into k equal-sized groups and uses each group as the other group's validation set (or "test" data). It then repeats this for each group k number of times and outputs the mean accuracy of all the groups in total.
 
-In the code below, k represents the number of train-test-split groups I use in my cross-validation step. After toggling this value a bit, I see the best results with k = 4.
+In more formal terms, cv "is a technique for assessing how the statistical analysis generalizes to an independent dataset" (- [here](https://www.digitalvidya.com/blog/cross-validation-in-machine-learning/)).
+
+After toggling my k-value a bit in the code below, I found the best results with k = 4.
 
 
 ```python
@@ -377,7 +369,7 @@ print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
 
 #### Cross-Validation Interpretation
 
-Cross-validation (cv) is a very important tool for data scientists because it signals to us whether our model is over- or underfit. Since our scores here a significantly similar to our model created with the train-test-split method, we know that our model is pretty sound. In more formal terms, cv "is a technique for assessing how the statistical analysis generalizes to an independent dataset" (- [here](https://www.digitalvidya.com/blog/cross-validation-in-machine-learning/)).
+Cross-validation (cv) is a very important tool for data scientists because it signals to us whether our model is over- or underfit. Since our scores here are significantly similar to the model created with the train-test-split method (or the "holdout method"), we know that our model is pretty sound. 
 
 There are many types of cross-validation one could use on a machine learning model. From what I understand, the most widely used method is k-fold cross-validation because of its computational simplicity (using sklearn, at least) and efficiency (provided your k isn't gigantic (typically, k = 10 is tested first)).
 
